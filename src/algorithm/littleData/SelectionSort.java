@@ -1,4 +1,4 @@
-package algorithm;
+package algorithm.littleData;
 
 /**
  * 选择排序
@@ -13,7 +13,8 @@ public class SelectionSort {
         int temp = 0;
         for(int i = 0; i < n; i++){
             int value = Integer.MAX_VALUE;
-            for(int j = i; j < n; j++){
+            int j = i;
+            for(; j < n; j++){
 
                 if(array[j] < value){
                     temp = j;
@@ -22,8 +23,11 @@ public class SelectionSort {
 
 
             }
-            array[temp] = array[i];
-            array[i] = value;
+            if (j!= i){
+                array[temp] = array[i];
+                array[i] = value;
+            }
+
 
         }
 
@@ -33,7 +37,7 @@ public class SelectionSort {
     }
     public static void main(String[] args){
 
-        int[] array = new int[]{2,1,3,1,2,3};
+        int[] array = new int[]{6,5,4,3,2,1,0};
 
         array = selectionSort(array, array.length);
 
