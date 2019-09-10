@@ -9,11 +9,12 @@ import java.util.Map;
 public class Recursion {
 
 
+
+
+
     // 假如这里有 n 个台阶，每次你可以跨 1 个台阶或者 2 个,请问走这 n 个台阶有多少走法
-    // F(1) = 1; F(2) = 2; f(3) = f(2) + f(1) F(N) = F(N-1) + F(n -2) ;
-
+    // F(1) = 1; F(2) = 2; f(3) = f(2) + f(1) F(N) = F(N-1) + F(n -
     static Map<Long,Long> map = new HashMap();
-
     public static Long stepRecursion(Long n){
         if (n==1l) return 1l;
         if (n == 2l) return  2l;

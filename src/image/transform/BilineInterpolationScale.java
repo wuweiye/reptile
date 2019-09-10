@@ -229,7 +229,6 @@ public class BilineInterpolationScale {
                 array[k++] = ARGB;
             }
         }
-
         //System.out.println("w*h="+ w*h);
         //System.out.println("array="+ array.length);
 

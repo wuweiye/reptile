@@ -41,8 +41,11 @@ public class GrayImage {
                     final int b = color & 0xff;
                     int gray = (int) (0.3 * r + 0.59 * g + 0.11 * b);;
                     int newPixel = colorToRGB(255, gray, gray, gray);
+
+                    System.out.print(color + ",");
                     grayImage.setRGB(i, j, newPixel);
                 }
+                System.out.println("");
             }
 
 
