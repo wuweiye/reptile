@@ -1,5 +1,6 @@
 package image;
 
+import image.transform.BinarizationImage;
 import image.transform.GrayImage;
 import image.transform.GrayImageToTxt;
 
@@ -16,18 +17,16 @@ public class ImageMain {
 
     public static void main(String[] args){
 
+        String path = "C:\\Users\\001\\Pictures\\Saved Pictures\\";
 
-        BufferedImage image =  GrayImage.grayWeighImage("D:\\222.png");
+        String name = "2.jpg";
 
 
+        GrayImage.transform(path + name,path + "gray2" + name);
 
-        File outputfile = new File("D:\\222gray.png");
+        //BinarizationImage.transform(path+ name,path + "bin" + name);
 
-        try {
-            ImageIO.write(image, "png", outputfile);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        System.out.println("over");
 
 
     }

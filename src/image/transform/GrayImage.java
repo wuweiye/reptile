@@ -1,5 +1,7 @@
 package image.transform;
 
+import image.entity.ImageGray;
+
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -14,10 +16,26 @@ import java.io.IOException;
 public class GrayImage {
 
 
-    private static int colorToRGB(int alpha, int red , int green, int blue){
+    public static void main(String[] args) {
+        ImageGray imageGray = new ImageGray();
+        int transA = 100;
+        int transB = 200;
+        int gray = imageGray.getGray(0,0);
+        int transGray = transA + (int)((Double.valueOf((transB - transA)+"")/(imageGray.getMaxGray()- imageGray.getMinGray())*(gray - imageGray.getMinGray())));
+
+        System.out.println("原灰度：" + gray +" 转换后灰度" + transGray);
+        int newPixel = colorToRGB(255, transGray, transGray, transGray);
+
+        System.out.println("RGB:" + newPixel);
+        //transGray(100,200,imageGray);
+
+    }
+
+
+    protected static int colorToRGB(int alpha, int red , int green, int blue){
         int newPixel = 0;
-        newPixel += alpha;
-        newPixel = newPixel << 8;
+        /*newPixel += alpha;
+        newPixel = newPixel << 8;*/
         newPixel += red;
         newPixel = newPixel << 8;
         newPixel += green;
@@ -27,27 +45,51 @@ public class GrayImage {
         return newPixel;
     }
 
+
+    /**
+     * 灰度线性转换
+     * @param transA
+     * @param transB
+     */
+    public static void transGray(int transA,int transB,ImageGray imageGray){
+
+        for(int i=0; i< imageGray.getWeight();i++){
+            for(int j = 0; j< imageGray.getHeight(); j++){
+
+                int gray = imageGray.getGray(i,j);
+                int transGray = transA + (int)((Double.valueOf((transB - transA)+"")/(imageGray.getMaxGray()- imageGray.getMinGray())*(gray - imageGray.getMinGray())));
+                System.out.println("原灰度：" + gray +"- 转换后灰度" + transGray);
+                imageGray.getGrayArray()[i][j] = transGray;
+            }
+        }
+
+
+    }
+
+
+
+
     public static BufferedImage grayWeighImage(String path){
         try {
 
             BufferedImage image = ImageIO.read(new File(path));
             BufferedImage grayImage = new BufferedImage(image.getWidth(),image.getHeight(),image.getType());
 
+            ImageGray imageGray = new ImageGray(image);
+
+            System.out.println("当前灰度范围：[" + imageGray.getMinGray() +"," + imageGray.getMaxGray() + "]");
+
+            transGray(0,255,imageGray);
+
             for (int i = 0; i < image.getWidth(); i++) {
                 for (int j = 0; j < image.getHeight(); j++) {
-                    final int color = image.getRGB(i, j);
-                    final int r = (color >> 16) & 0xff;
-                    final int g = (color >> 8) & 0xff;
-                    final int b = color & 0xff;
-                    int gray = (int) (0.3 * r + 0.59 * g + 0.11 * b);;
-                    int newPixel = colorToRGB(255, gray, gray, gray);
 
-                    System.out.print(color + ",");
+                    int gray = imageGray.getGray(i,j);
+                    int newPixel = colorToRGB(255, gray, gray, gray);
                     grayImage.setRGB(i, j, newPixel);
                 }
-                System.out.println("");
+                //System.out.println("");
             }
-
 
            return grayImage;
         } catch (Exception e) {
@@ -57,6 +99,7 @@ public class GrayImage {
 
         return null;
     }
+
 
 
     public static BufferedImage grayImage(String path){
@@ -91,5 +134,24 @@ public class GrayImage {
         }
 
         return  null;
+    }
+
+
+    /**
+     * 转化灰度图
+     * @param sourcePath
+     * @param transformPath
+     */
+    public static void transform(String sourcePath,String transformPath){
+
+        String suffix = transformPath.substring(transformPath.lastIndexOf(".")+1);
+        BufferedImage image =  GrayImage.grayWeighImage(sourcePath);
+        File outputFile = new File(transformPath);
+
+        try {
+            ImageIO.write(image, suffix, outputFile);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
